@@ -1,0 +1,15 @@
+{
+  "selected_provider": "gemini",
+  "selected_models": {
+    "gemini": "gemini-3-flash-preview",
+    "openai": "gpt-4.1",
+    "anthropic": "claude-3-7-sonnet-latest",
+    "grok": "grok-2-latest"
+  },
+  "api_keys": {
+    "gemini": "",
+    "openai": "",
+    "anthropic": "",
+    "grok": ""
+  }
+}

@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Wing Designer | AI 날개 설계 프로그램</title>
+    <meta name="description" content="Gemini AI를 사용한 항공기 날개 설계 및 3D 시각화 프로그램">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo">
+                <svg class="logo-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z" />
+                    <path d="M2 17l10 5 10-5" />
+                    <path d="M2 12l10 5 10-5" />
+                </svg>
+                <h1>Wing Designer AI</h1>
+            </div>
+            <div class="header-actions">
+                <button id="providerSettingsBtn" class="btn btn-ghost">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3" />
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33h.02a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51h.02a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.02a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z" />
+                    </svg>
+                    AI 설정
+                </button>
+                <button id="historyBtn" class="btn btn-ghost">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 8v5l3 3" />
+                        <circle cx="12" cy="12" r="9" />
+                    </svg>
+                    히스토리
+                </button>
+                <button id="saveNamedBtn" class="btn btn-ghost">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z" />
+                        <polyline points="17 21 17 13 7 13 7 21" />
+                        <polyline points="7 3 7 8 15 8" />
+                    </svg>
+                    이름 저장
+                </button>
+                <button id="resetBtn" class="btn btn-ghost">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                        <path d="M3 3v5h5" />
+                    </svg>
+                    새 설계
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Chat Panel -->
+            <section class="chat-panel">
+                <div class="panel-header">
+                    <h2>AI 설계 어시스턴트</h2>
+                    <span id="assistantModelBadge" class="badge">AI 미설정</span>
+                </div>
+
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message assistant">
+                        <div class="message-avatar">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93s3.06-7.44 7-7.93v15.86zm2-15.86c3.94.49 7 3.85 7 7.93s-3.06 7.44-7 7.93V4.07z" />
+                            </svg>
+                        </div>
+                        <div class="message-content">
+                            <p>안녕하세요. AI 날개 설계 어시스턴트입니다.</p>
+                            <p>어떤 항공기나 드론의 날개를 설계하고 싶은지, 기체 유형과 목적을 알려주세요. 조건에 맞춰 최적안을 제안해드릴게요.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <form id="chatForm" class="chat-input-container">
+                    <textarea id="chatInput" placeholder="메시지를 입력하세요..." rows="1"></textarea>
+                    <button type="submit" class="btn btn-primary" id="sendBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                    </button>
+                </form>
+            </section>
+
+            <!-- Visualization Panel -->
+            <section class="visualization-panel">
+                <div class="panel-tabs">
+                    <button class="tab-btn active" data-tab="3d">3D 모델</button>
+                    <button class="tab-btn" data-tab="airfoil">에어포일</button>
+                    <button class="tab-btn" data-tab="specs">제원</button>
+                </div>
+
+                <!-- 3D Viewer Tab -->
+                <div id="tab3d" class="tab-content active">
+                    <div id="viewer3d" class="viewer-3d">
+                        <div class="placeholder-content">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path
+                                    d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+                                <polyline points="3.27 6.96 12 12.01 20.73 6.96" />
+                                <line x1="12" y1="22.08" x2="12" y2="12" />
+                            </svg>
+                            <p>AI와 대화를 통해 날개를 설계하면<br>여기에 3D 모델이 표시됩니다.</p>
+                        </div>
+                    </div>
+                    <div class="viewer-controls" id="viewerControls" style="display: none;">
+                        <button class="btn btn-sm" id="resetViewBtn">뷰 초기화</button>
+                        <button class="btn btn-sm btn-accent" id="exportSTLBtn">STL 내보내기</button>
+                        <button class="btn btn-sm btn-accent" id="exportOBJBtn">OBJ 내보내기</button>
+                    </div>
+                </div>
+
+                <!-- Airfoil Tab -->
+                <div id="tabAirfoil" class="tab-content">
+                    <canvas id="airfoilCanvas" class="airfoil-canvas"></canvas>
+                    <div class="airfoil-info" id="airfoilInfo">
+                        <p>설계된 에어포일 정보가 여기에 표시됩니다.</p>
+                    </div>
+                </div>
+
+                <!-- Specs Tab -->
+                <div id="tabSpecs" class="tab-content">
+                    <div class="specs-container" id="specsContainer">
+                        <div class="spec-placeholder">
+                            <p>날개 설계가 완료되면 상세 제원이 표시됩니다.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- App Dialog Modal -->
+    <div id="appDialogModal" class="app-dialog-modal" aria-hidden="true">
+        <div id="appDialogOverlay" class="app-dialog-overlay"></div>
+        <div class="app-dialog-panel" role="dialog" aria-modal="true" aria-labelledby="appDialogTitle">
+            <h3 id="appDialogTitle">알림</h3>
+            <p id="appDialogMessage"></p>
+            <input id="appDialogInput" class="app-dialog-input" type="text" autocomplete="off" />
+            <div class="app-dialog-actions">
+                <button id="appDialogCancelBtn" class="btn btn-ghost" type="button">취소</button>
+                <button id="appDialogOkBtn" class="btn btn-primary" type="button">확인</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Provider Settings Modal -->
+    <div id="providerModal" class="provider-modal" aria-hidden="true">
+        <div id="providerOverlay" class="provider-overlay"></div>
+        <div class="provider-panel">
+            <div class="provider-panel-header">
+                <h3>AI 설정</h3>
+                <button id="closeProviderBtn" class="btn btn-sm btn-ghost">닫기</button>
+            </div>
+
+            <p class="provider-help">
+                API 키를 저장하면 해당 AI를 어시스턴트로 선택할 수 있습니다. 키는 로컬 설정 파일에만 저장됩니다.
+            </p>
+
+            <div class="provider-key-list">
+                <div class="provider-key-item">
+                    <label for="geminiApiKeyInput">Gemini API Key</label>
+                    <div class="provider-key-controls">
+                        <input id="geminiApiKeyInput" class="provider-key-input" type="password" autocomplete="off" placeholder="AIza..." />
+                        <button class="btn btn-sm btn-ghost" type="button" data-provider-clear="gemini">삭제</button>
+                    </div>
+                    <span id="geminiKeyStatus" class="provider-key-status">미설정</span>
+                </div>
+
+                <div class="provider-key-item">
+                    <label for="openaiApiKeyInput">GPT (OpenAI) API Key</label>
+                    <div class="provider-key-controls">
+                        <input id="openaiApiKeyInput" class="provider-key-input" type="password" autocomplete="off" placeholder="sk-..." />
+                        <button class="btn btn-sm btn-ghost" type="button" data-provider-clear="openai">삭제</button>
+                    </div>
+                    <span id="openaiKeyStatus" class="provider-key-status">미설정</span>
+                </div>
+
+                <div class="provider-key-item">
+                    <label for="anthropicApiKeyInput">Claude (Anthropic) API Key</label>
+                    <div class="provider-key-controls">
+                        <input id="anthropicApiKeyInput" class="provider-key-input" type="password" autocomplete="off" placeholder="sk-ant-..." />
+                        <button class="btn btn-sm btn-ghost" type="button" data-provider-clear="anthropic">삭제</button>
+                    </div>
+                    <span id="anthropicKeyStatus" class="provider-key-status">미설정</span>
+                </div>
+
+                <div class="provider-key-item">
+                    <label for="grokApiKeyInput">Grok (xAI) API Key</label>
+                    <div class="provider-key-controls">
+                        <input id="grokApiKeyInput" class="provider-key-input" type="password" autocomplete="off" placeholder="xai-..." />
+                        <button class="btn btn-sm btn-ghost" type="button" data-provider-clear="grok">삭제</button>
+                    </div>
+                    <span id="grokKeyStatus" class="provider-key-status">미설정</span>
+                </div>
+            </div>
+
+            <div class="provider-select-grid">
+                <div class="provider-select-item">
+                    <label for="assistantProviderSelect">어시스턴트 제공자</label>
+                    <select id="assistantProviderSelect"></select>
+                </div>
+                <div class="provider-select-item">
+                    <label for="assistantModelSelect">사용 모델</label>
+                    <select id="assistantModelSelect"></select>
+                </div>
+            </div>
+
+            <p id="providerStateText" class="provider-state-text">감지된 API 없음</p>
+
+            <div class="provider-actions">
+                <button id="refreshProviderBtn" class="btn btn-sm btn-ghost" type="button">상태 새로고침</button>
+                <button id="saveProviderBtn" class="btn btn-accent" type="button">설정 저장</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- History Modal -->
+    <div id="historyModal" class="history-modal" aria-hidden="true">
+        <div id="historyOverlay" class="history-overlay"></div>
+        <div class="history-panel">
+            <div class="history-panel-header">
+                <h3>설계 히스토리</h3>
+                <button id="closeHistoryBtn" class="btn btn-sm btn-ghost">닫기</button>
+            </div>
+
+            <div class="history-save-row">
+                <input id="historyNameInput" type="text" placeholder="히스토리 이름 (선택)">
+                <button id="saveHistoryBtn" class="btn btn-sm btn-accent">현재 상태 저장</button>
+            </div>
+
+            <div class="history-compare-row">
+                <button id="compareHistoryBtn" class="btn btn-sm" disabled>선택 2개 비교</button>
+                <button id="clearCompareSelectionBtn" class="btn btn-sm btn-ghost">선택 해제</button>
+                <span id="compareSelectionStatus" class="history-compare-status">0/2 선택됨</span>
+            </div>
+
+            <div id="historyList" class="history-list">
+                <p class="history-empty">저장된 히스토리가 없습니다.</p>
+            </div>
+            <div id="historyCompareResult" class="history-compare-result"></div>
+        </div>
+    </div>
+
+    <!-- Three.js CDN (r128 - OrbitControls 호환 버전) -->
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/STLExporter.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/exporters/OBJExporter.js"></script>
+
+    <!-- Chart.js CDN (성능 그래프용) -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+
+    <!-- App Scripts -->
+    <script src="/static/js/airfoil.js"></script>
+    <script src="/static/js/viewer3d.js"></script>
+    <script src="/static/js/exporter.js"></script>
+    <script src="/static/js/aero_chart.js"></script>
+    <script src="/static/js/chat.js"></script>
+    <script src="/static/js/main.js"></script>
+</body>
+
+</html>
