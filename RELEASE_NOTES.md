@@ -15,4 +15,4 @@
 
 ### 패키지 경로
 
-- `artifacts/release/AI_Design_Program_Run`
+- `AI_Design_Program_Run`
